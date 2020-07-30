@@ -18,8 +18,8 @@ app.use(cors())
 // route
 app.get('/', async(req, res) => {
      // Retrieve all posts
-     const allPosts = await prisma.offering_.findMany()
-    res.send(allPosts)
+    //  const allPosts = await prisma.offering_.findMany()
+    res.send('this is working')
 })
 
 app.get('/policy/:type', async(req, res) => {
