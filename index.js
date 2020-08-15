@@ -129,11 +129,11 @@ app.post('/verified', (req, res) =>{
     var opt = Math.floor(100000 + Math.random() * 900000);
 
         try {
-            sgMail.setApiKey('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');
+            sgMail.setApiKey('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');
             const msg = {
                 to: email,
-                from: 'info@yousure.xyz',
-                templateId: 'd-37d838a69d6e4e149524a59c4bea573c',
+                from: 'developer@ellopod.com',
+                templateId: 'd-209c02d317604fa68fbb7d77963c73bb',
                 dynamic_template_data: {
                  opt: opt
                 },
@@ -173,11 +173,11 @@ app.post('/verify/:email/:fname', async(req, res) => {
     var fname = req.params.fname;
     var opt = Math.floor(100000 + Math.random() * 900000);
    try {
-    sgMail.setApiKey('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');
+    sgMail.setApiKey('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');
     const msg = {
         to: email,
-        from: 'info@yousure.xyz',
-        templateId: 'd-37d838a69d6e4e149524a59c4bea573c',
+        from: 'developer@ellopod.com',
+        templateId: 'd-209c02d317604fa68fbb7d77963c73bb',
         dynamic_template_data: {
          opt: opt
         },
