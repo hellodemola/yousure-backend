@@ -2,3 +2,4 @@ UsersLenovoyeanpm-cache/
 node_modules/
 UsersLenovoyeanpm-cache/*
 node_modules/*
+.env
