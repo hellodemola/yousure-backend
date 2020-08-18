@@ -8,7 +8,7 @@ const app = express();
 const sanitizeHTML = require("sanitize-html");
 const jwt = require("jsonwebtoken");
 const sgMail = require('@sendgrid/mail');
-require('dotenv').config();
+
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
@@ -129,7 +129,7 @@ app.post('/verified', (req, res) =>{
     var opt = Math.floor(100000 + Math.random() * 900000);
 
         try {
-            sgMail.setApiKey(process.env.sendGridApi);
+            sgMail.setApiKey('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');
             const msg = {
                 to: email,
                 from: 'developer@ellopod.com',
@@ -173,7 +173,7 @@ app.post('/verify/:email/:fname', async(req, res) => {
     var fname = req.params.fname;
     var opt = Math.floor(100000 + Math.random() * 900000);
    try {
-    sgMail.setApiKey(process.env.sendGridApi);
+    sgMail.setApiKey('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');
     const msg = {
         to: email,
         from: 'developer@ellopod.com',
