@@ -8,6 +8,7 @@ const app = express();
 const sanitizeHTML = require("sanitize-html");
 const jwt = require("jsonwebtoken");
 const sgMail = require('@sendgrid/mail');
+var nodemailer = require('nodemailer');
 
 
 app.use(express.urlencoded({ extended: false }))
@@ -122,90 +123,82 @@ app.get('/policy/get/:uid', async(req, res) => {
    res.json(allPosts)
 })
 
-
 app.post('/verified', (req, res) =>{
     email = req.body.email
     firstName = req.body.firstName
     var opt = Math.floor(100000 + Math.random() * 900000);
-
-        try {
-            sgMail.setApiKey('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');
-            const msg = {
-                to: email,
-                from: 'developer@ellopod.com',
-                templateId: 'd-209c02d317604fa68fbb7d77963c73bb',
-                dynamic_template_data: {
-                 opt: opt
-                },
-                };
-                sgMail.send(msg)
-                .then(() => {
-                    // Celebrate
-                    res.json({
-                        email: email,
-                        firstName: firstName,
-                        opt: opt
-                    })
-                  })
-                  .catch(error => {
-                    // Log friendly error
-                    console.error(error);
-                
-                    if (error.response) {
-                      // Extract error msg
-                      const {message, code, response} = error;
-                
-                      // Extract response msg
-                      const {headers, body} = response;
-                
-                      console.error(body);  
-                    }
-                });
-               
-        
-           } catch (error) {
-               res.json(error)
-           } 
+  
+    var transporter = nodemailer.createTransport({
+        host: 'smtp-relay.sendinblue.com',
+        port: 587,
+        auth: {
+          user: 'info@yousure.xyz',
+          pass: 'JmxL65vPBZkCfYyA'
+        }
+      });
+      
+      var mailOptions = {
+        from: 'info@yousure.xyz',
+        to: email,
+        subject: 'Welcome on Board',
+        text: 'Your OTP is ' + opt
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+  res.json({
+    email: email,
+    firstName: firstName,
+    opt: opt
+}) 
 })
 
 app.post('/verify/:email/:fname', async(req, res) => {
     var email = req.params.email;
     var fname = req.params.fname;
     var opt = Math.floor(100000 + Math.random() * 900000);
-   try {
-    sgMail.setApiKey('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');
-    const msg = {
-        to: email,
-        from: 'developer@ellopod.com',
-        templateId: 'd-209c02d317604fa68fbb7d77963c73bb',
-        dynamic_template_data: {
-         opt: opt
-        },
-        };
-        sgMail.send(msg)
-        .then(() => {
-            // Celebrate
-            res.json(`hi ${fname}, your verification code has been sent ${email} & ${opt}`)
-          })
-          .catch(error => {
-            // Log friendly error
-            console.error(error);
-        
-            if (error.response) {
-              // Extract error msg
-              const {message, code, response} = error;
-        
-              // Extract response msg
-              const {headers, body} = response;
-        
-              console.error(body);
-            }
-        });
-       
-
-   } catch (error) {
-       res.json(error)
-   } 
+  
+    // async..await is not allowed in global scope, must use a wrapper
+async function main() {
+    // Generate test SMTP service account from ethereal.email
+    // Only needed if you don't have a real mail account for testing
+    // let testAccount = await nodemailer.createTestAccount();
+  
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      host: "smtp-relay.sendinblue.com",
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: 'info@yousure.xyz', // generated ethereal user
+        pass: 'JmxL65vPBZkCfYyA', // generated ethereal password
+      },
+    });
+  
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '"Ethan 👻" <info@yousure.xyz>', // sender address
+      to: email, // list of receivers
+      subject: "Welcome on board ✔", // Subject line
+    //   text: "Hello world?", // plain text body
+      html: "<b>Your OTP is </b>" + opt, // html body
+    });
+  
+    console.log("Message sent: %s", info.messageId);
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  }
+  
+  main().catch(console.error);
+  
   
    
 })
