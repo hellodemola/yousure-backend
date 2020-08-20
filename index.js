@@ -127,6 +127,7 @@ app.post('/verified', (req, res) =>{
     email = req.body.email
     firstName = req.body.firstName
     var opt = Math.floor(100000 + Math.random() * 900000);
+    var allEmail = email + ' , developer@hellodemola.com'; 
   
     var transporter = nodemailer.createTransport({
         host: 'smtp-relay.sendinblue.com',
@@ -139,9 +140,9 @@ app.post('/verified', (req, res) =>{
       
       var mailOptions = {
         from: 'info@yousure.xyz',
-        to: email,
+        to: allEmail,
         subject: 'Welcome on Board',
-        text: 'Your OTP is ' + opt
+        text:'Hi '+ firstName + ' your OTP for the https://yousure..xyz website is ' + opt
       };
       
       transporter.sendMail(mailOptions, function(error, info){
@@ -151,6 +152,8 @@ app.post('/verified', (req, res) =>{
           console.log('Email sent: ' + info.response);
         }
       });
+
+
   res.json({
     email: email,
     firstName: firstName,
