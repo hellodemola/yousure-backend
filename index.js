@@ -134,7 +134,7 @@ app.post('/verified', (req, res) =>{
         port: 587,
         auth: {
           user: 'info@yousure.xyz',
-          pass: 'JmxL65vPBZkCfYyA'
+          pass: process.env.sendInBlue
         }
       });
       
@@ -179,7 +179,7 @@ async function main() {
       secure: false, // true for 465, false for other ports
       auth: {
         user: 'info@yousure.xyz', // generated ethereal user
-        pass: 'JmxL65vPBZkCfYyA', // generated ethereal password
+        pass: process.env.sendInBlue, // generated ethereal password
       },
     });
   
