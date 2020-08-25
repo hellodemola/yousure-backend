@@ -127,38 +127,45 @@ app.post('/verified', (req, res) =>{
     email = req.body.email
     firstName = req.body.firstName
     var opt = Math.floor(100000 + Math.random() * 900000);
-    var allEmail = email + ' , developer@hellodemola.com'; 
-  
-    var transporter = nodemailer.createTransport({
-        host: 'smtp-relay.sendinblue.com',
-        port: 587,
-        auth: {
-          user: 'info@yousure.xyz',
-          pass: process.env.sendInBlue
-        }
-      });
-      
-      var mailOptions = {
-        from: 'info@yousure.xyz',
-        to: allEmail,
-        subject: 'Welcome on Board',
-        text:'Hi '+ firstName + ' your OTP for the https://yousure..xyz website is ' + opt
-      };
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-
-
-  res.json({
-    email: email,
-    firstName: firstName,
-    opt: opt
-}) 
+    var allEmail = email; 
+    try {
+        sgMail.setApiKey(process.env.sendGridApi);
+        const msg = {
+            to: email,
+            from: 'developer@ellopod.com',
+            templateId: 'd-209c02d317604fa68fbb7d77963c73bb',
+            dynamic_template_data: {
+             opt: opt
+            },
+            };
+            sgMail.send(msg)
+            .then(() => {
+                // Celebrate
+                res.json({
+                    email: email,
+                    firstName: firstName,
+                    opt: opt
+                })
+              })
+              .catch(error => {
+                // Log friendly error
+                console.error(error);
+            
+                if (error.response) {
+                  // Extract error msg
+                  const {message, code, response} = error;
+            
+                  // Extract response msg
+                  const {headers, body} = response;
+            
+                  console.error(body);  
+                }
+            });
+           
+    
+       } catch (error) {
+           res.json(error)
+       } 
 })
 
 app.post('/verify/:email/:fname', async(req, res) => {
