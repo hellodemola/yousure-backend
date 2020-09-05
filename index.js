@@ -133,45 +133,87 @@ app.post('/verified', (req, res) =>{
     var opt = Math.floor(100000 + Math.random() * 900000);
     var allEmail = email; 
     async function main() {
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        // let testAccount = await nodemailer.createTestAccount();
-      
-        // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
           host: "smtp-relay.sendinblue.com",
           port: 587,
-          secure: false, // true for 465, false for other ports
+          secure: false, 
           auth: {
-            user: 'developer@hellodemola.com', // generated ethereal user
-            pass: process.env.sendInBlue, // generated ethereal password
+            user: 'developer@hellodemola.com', 
+            pass: process.env.sendInBlue, 
           },
         });
       
-        // send mail with defined transport object
         let info = await transporter.sendMail({
-          from: '"Ethan 👻" <developer@hellodemola.com>', // sender  address
-          to: email, // list of receivers
-          subject: "Welcome to Yousure.ng ✔", // Subject line
-        //   text: "Hello world?", // plain text body
-          html: "Hi " +firstName + " <b>Your OTP is </b>" + opt, // html body
+          from: '"Ethan 👻" <developer@hellodemola.com>', 
+          to: email, 
+          subject: "Welcome to Yousure.ng ✔", 
+          html: "Hi " +firstName + " Your OTP is " + "<b>" + opt + "</b>", 
         });
+
+        //add number to db
+        await prisma.user_table.create({
+          data: {
+            fname: firstName,
+            email: email,
+          }
+        })
 
         res.json({
             firstName: firstName,
             email: email,
             opt: opt
         })
-      
         console.log("Message sent: %s", info.messageId);
-        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-      
-        // Preview only available when sending through an Ethereal account
-        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
       }
       
       main().catch(console.error);
+})
+
+app.post('/optin', (req, res) =>{
+  email = req.body.email
+  firstName = req.body.firstName
+  lastName = req.body.lastName
+  address = req.body.address
+  phone = req.body.phone
+  productType = req.body.productType
+  var opt = Math.floor(100000 + Math.random() * 900000);
+  var allEmail = email; 
+  async function main() {
+      let transporter = nodemailer.createTransport({
+        host: "smtp-relay.sendinblue.com",
+        port: 587,
+        secure: false, 
+        auth: {
+          user: 'developer@hellodemola.com', 
+          pass: process.env.sendInBlue, 
+        },
+      });
+    
+      let info = await transporter.sendMail({
+        from: '"Ethan 👻" <developer@hellodemola.com>', 
+        to: email, 
+        subject: "Your HMO registration has been received.", 
+        html: `Hi <b>${firstName} ${lastName}</b>, <br/><br/> Your ${productType} application has been received and you will contacted shortly via ${phone} `, 
+      });
+
+      //add number to db
+      await prisma.optin.create({
+        data: {
+          fname: firstName,
+          lname: lastName,
+          phone: phone,
+          address: address,
+          policy: productType,
+          email: email,
+        }
+      })
+
+      res.status(200).send('successfully')
+
+      console.log("Message sent: %s", info.messageId);
+    }
+    
+    main().catch(console.error);
 })
 
 app.post('/verify/:email/:fname', async(req, res) => {
@@ -202,7 +244,7 @@ async function main() {
       to: email, // list of receivers
       subject: "Welcome on board ✔", // Subject line
     //   text: "Hello world?", // plain text body
-      html: "<b>Your OTP is </b>" + opt, // html body
+      html: "<b>Your OTP is </br>" + opt, // html body
     });
   
     console.log("Message sent: %s", info.messageId);

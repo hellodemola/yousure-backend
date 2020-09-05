@@ -92,13 +92,14 @@ model offering_ {
 }
 
 model optin {
-  id      Int    @default(autoincrement()) @id @map("_id")
-  fname   String
-  lname   String
-  phone   String
-  email   String
-  address String
-  policy  String
+  id      Int      @default(autoincrement()) @id @map("_id")
+  fname   String?
+  lname   String?
+  phone   String?
+  email   String?
+  address String?
+  policy  String?
+  date    DateTime @default(now())
 }
 
 model table_1 {
@@ -116,9 +117,9 @@ model table_1 {
 
 model user_table {
   id           Int      @default(autoincrement()) @id
-  product_type String
+  product_type String?
   fname        String
-  lname        String
+  lname        String?
   email        String
   phone        String?
   time         DateTime @default(now())
