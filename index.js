@@ -143,18 +143,18 @@ app.post('/verified', (req, res) =>{
           port: 587,
           secure: false, // true for 465, false for other ports
           auth: {
-            user: 'info@yousure.xyz', // generated ethereal user
+            user: 'developer@hellodemola.com', // generated ethereal user
             pass: process.env.sendInBlue, // generated ethereal password
           },
         });
       
         // send mail with defined transport object
         let info = await transporter.sendMail({
-          from: '"Ethan 👻" <info@yousure.xyz>', // sender  address
+          from: '"Ethan 👻" <developer@hellodemola.com>', // sender  address
           to: email, // list of receivers
-          subject: "Welcome on board ✔", // Subject line
+          subject: "Welcome to Yousure.ng ✔", // Subject line
         //   text: "Hello world?", // plain text body
-          html: "Hi " +firstName + "<b>Your OTP is </b>" + opt, // html body
+          html: "Hi " +firstName + " <b>Your OTP is </b>" + opt, // html body
         });
 
         res.json({
@@ -191,14 +191,14 @@ async function main() {
       port: 587,
       secure: false, // true for 465, false for other ports
       auth: {
-        user: 'info@yousure.xyz', // generated ethereal user
+        user: 'developer@hellodemola.com', // generated ethereal user
         pass: process.env.sendInBlue, // generated ethereal password
       },
     });
   
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"Ethan 👻" <info@yousure.xyz>', // sender  address
+      from: '"Ethan 👻" <developer@hellodemola.com>', // sender  address
       to: email, // list of receivers
       subject: "Welcome on board ✔", // Subject line
     //   text: "Hello world?", // plain text body
