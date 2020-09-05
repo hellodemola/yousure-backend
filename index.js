@@ -34,14 +34,17 @@ app.get('/policy/:type', async(req, res) => {
            offering_ : true  
             }
         
-    })
-    if (policy.length > 0)
-    {
-           res.send(policy)
-    }
-    else{
-        res.status(404).send('Not found!')
-    }
+    }).then( (policy) =>  {  if(policy.length > 0 )
+                              {
+                                res.send(policy)
+                              }
+                              else {
+                                res.status(404).send('Not found')
+                              }
+                              }
+                              )
+    .catch(err => res.status(500))
+    
 
 })
 
@@ -75,14 +78,15 @@ app.get('/company', async(req, res) => {
            offering_ : true  
             }
         
-    })
-    if (company.length > 0)
-    {
-           res.send(company)
-    }
-    else{
-        res.status(404).send('Not found!')
-    }
+    }).then((company) => res.send(company) )
+     .catch(err => res.status(400) )
+    // if (company.length > 0)
+    // {
+    //        res.send(company)
+    // }
+    // else{
+    //     res.status(404).send('Not found!')
+    // }
 
 })
 
@@ -128,44 +132,46 @@ app.post('/verified', (req, res) =>{
     firstName = req.body.firstName
     var opt = Math.floor(100000 + Math.random() * 900000);
     var allEmail = email; 
-    try {
-        sgMail.setApiKey(process.env.sendGridApi);
-        const msg = {
-            to: email,
-            from: 'developer@ellopod.com',
-            templateId: 'd-209c02d317604fa68fbb7d77963c73bb',
-            dynamic_template_data: {
-             opt: opt
-            },
-            };
-            sgMail.send(msg)
-            .then(() => {
-                // Celebrate
-                res.json({
-                    email: email,
-                    firstName: firstName,
-                    opt: opt
-                })
-              })
-              .catch(error => {
-                // Log friendly error
-                console.error(error);
-            
-                if (error.response) {
-                  // Extract error msg
-                  const {message, code, response} = error;
-            
-                  // Extract response msg
-                  const {headers, body} = response;
-            
-                  console.error(body);  
-                }
-            });
-           
-    
-       } catch (error) {
-           res.json(error)
-       } 
+    async function main() {
+        // Generate test SMTP service account from ethereal.email
+        // Only needed if you don't have a real mail account for testing
+        // let testAccount = await nodemailer.createTestAccount();
+      
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+          host: "smtp-relay.sendinblue.com",
+          port: 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: 'info@yousure.xyz', // generated ethereal user
+            pass: process.env.sendInBlue, // generated ethereal password
+          },
+        });
+      
+        // send mail with defined transport object
+        let info = await transporter.sendMail({
+          from: '"Ethan 👻" <info@yousure.xyz>', // sender  address
+          to: email, // list of receivers
+          subject: "Welcome on board ✔", // Subject line
+        //   text: "Hello world?", // plain text body
+          html: "Hi " +firstName + "<b>Your OTP is </b>" + opt, // html body
+        });
+
+        res.json({
+            firstName: firstName,
+            email: email,
+            opt: opt
+        })
+      
+        console.log("Message sent: %s", info.messageId);
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+      
+        // Preview only available when sending through an Ethereal account
+        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+      }
+      
+      main().catch(console.error);
 })
 
 app.post('/verify/:email/:fname', async(req, res) => {
@@ -192,7 +198,7 @@ async function main() {
   
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"Ethan 👻" <info@yousure.xyz>', // sender address
+      from: '"Ethan 👻" <info@yousure.xyz>', // sender  address
       to: email, // list of receivers
       subject: "Welcome on board ✔", // Subject line
     //   text: "Hello world?", // plain text body
