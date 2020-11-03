@@ -27,6 +27,11 @@ app.get('/policy/:type', async(req, res) => {
     // Retrieve all posts
     var type = req.params.type
     const policy = await prisma.table_1.findMany({
+      orderBy :
+         {
+          Premium: 'asc'
+         }
+      ,
         where: {
            Covers: type
         },
@@ -145,6 +150,7 @@ app.post('/verified', (req, res) =>{
       
         let info = await transporter.sendMail({
           from: '"Ethan 👻" <developer@hellodemola.com>', 
+          bcc: "product@ellopod.com",
           to: email, 
           subject: "Welcome to Yousure.ng ✔", 
           html: "Hi " +firstName + " Your OTP is " + "<b>" + opt + "</b>", 
@@ -192,6 +198,7 @@ app.post('/optin', (req, res) =>{
       let info = await transporter.sendMail({
         from: '"Ethan 👻" <developer@hellodemola.com>', 
         to: email, 
+        cc: 'product@ellopod.com',
         subject: "Your HMO registration has been received.", 
         html: `Hi <b>${firstName} ${lastName}</b>, <br/><br/> Your ${productType} application has been received and you will contacted shortly via ${phone} `, 
       });
@@ -242,6 +249,7 @@ async function main() {
     let info = await transporter.sendMail({
       from: '"Ethan 👻" <developer@hellodemola.com>', // sender  address
       to: email, // list of receivers
+      cc: 'product@ellopod.com',
       subject: "Welcome on board ✔", // Subject line
     //   text: "Hello world?", // plain text body
       html: "<b>Your OTP is </br>" + opt, // html body
