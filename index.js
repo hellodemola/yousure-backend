@@ -29,7 +29,7 @@ app.get('/policy/:type', async(req, res) => {
     const policy = await prisma.table_1.findMany({
       orderBy :
          {
-          Premium: 'asc'
+          Premium: 'asc' 
          },
 
         where: {
