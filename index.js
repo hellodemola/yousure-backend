@@ -30,8 +30,8 @@ app.get('/policy/:type', async(req, res) => {
       orderBy :
          {
           Premium: 'asc'
-         }
-      ,
+         },
+
         where: {
            Covers: type
         },
