@@ -9,7 +9,7 @@ const sanitizeHTML = require("sanitize-html");
 const jwt = require("jsonwebtoken");
 const sgMail = require('@sendgrid/mail');
 var nodemailer = require('nodemailer');
-let support = 'developer@ellopod.ng, ademola.onasoga@gmail.com'
+let support = 'sales@ellopod.com, team@ellopod.com'
 
 
 app.use(express.urlencoded({ extended: false }))
