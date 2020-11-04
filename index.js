@@ -9,6 +9,7 @@ const sanitizeHTML = require("sanitize-html");
 const jwt = require("jsonwebtoken");
 const sgMail = require('@sendgrid/mail');
 var nodemailer = require('nodemailer');
+let support = 'developer@ellopod.ng'
 
 
 app.use(express.urlencoded({ extended: false }))
@@ -150,7 +151,8 @@ app.post('/verified', (req, res) =>{
       
         let info = await transporter.sendMail({
           from: '"Ethan 👻" <developer@hellodemola.com>', 
-          bcc: "developer@ellopod.ng",
+          bcc: support,
+          replyTo: support,
           to: email, 
           subject: "Welcome to Yousure.ng ✔", 
           html: "Hi " +firstName + " Your OTP is " + "<b>" + opt + "</b>", 
@@ -198,7 +200,8 @@ app.post('/optin', (req, res) =>{
       let info = await transporter.sendMail({
         from: '"Ethan 👻" <developer@hellodemola.com>', 
         to: email, 
-        cc: 'developer@ellopod.ng',
+        cc: support,
+        replyTo: support,
         subject: "Your HMO registration has been received.", 
         html: `Hi <b>${firstName} ${lastName}</b>, <br/><br/> Your ${productType} application has been received and you will contacted shortly via ${phone} `, 
       });
@@ -250,6 +253,7 @@ async function main() {
       from: '"Ethan 👻" <developer@hellodemola.com>', // sender  address
       to: email, // list of receivers
       cc: 'developer@ellopod.ng',
+      replyTo: support,
       subject: "Welcome on board ✔", // Subject line
     //   text: "Hello world?", // plain text body
       html: "<b>Your OTP is </br>" + opt, // html body
