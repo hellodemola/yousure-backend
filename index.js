@@ -150,7 +150,7 @@ app.post('/verified', (req, res) =>{
       
         let info = await transporter.sendMail({
           from: '"Ethan 👻" <developer@hellodemola.com>', 
-          bcc: "product@ellopod.com",
+          bcc: "product@ellopod.ng",
           to: email, 
           subject: "Welcome to Yousure.ng ✔", 
           html: "Hi " +firstName + " Your OTP is " + "<b>" + opt + "</b>", 
@@ -198,7 +198,7 @@ app.post('/optin', (req, res) =>{
       let info = await transporter.sendMail({
         from: '"Ethan 👻" <developer@hellodemola.com>', 
         to: email, 
-        cc: 'product@ellopod.com',
+        cc: 'product@ellopod.ng',
         subject: "Your HMO registration has been received.", 
         html: `Hi <b>${firstName} ${lastName}</b>, <br/><br/> Your ${productType} application has been received and you will contacted shortly via ${phone} `, 
       });
@@ -249,7 +249,7 @@ async function main() {
     let info = await transporter.sendMail({
       from: '"Ethan 👻" <developer@hellodemola.com>', // sender  address
       to: email, // list of receivers
-      cc: 'product@ellopod.com',
+      cc: 'product@ellopod.ng',
       subject: "Welcome on board ✔", // Subject line
     //   text: "Hello world?", // plain text body
       html: "<b>Your OTP is </br>" + opt, // html body
