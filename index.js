@@ -118,6 +118,19 @@ app.get('/company/:name', async(req, res) => {
 
 })
 
+app.get('/policy/get/', async(req, res) => {
+  var policyId = req.params.uid
+  var productId = parseInt(policyId)
+  // Retrieve all posts
+  const allPosts = await prisma.offering_.findMany({
+      
+    include:  {
+          table_1: true
+      }
+  })
+ res.json(allPosts)
+})
+
 app.get('/policy/get/:uid', async(req, res) => {
     var policyId = req.params.uid
     var productId = parseInt(policyId)
