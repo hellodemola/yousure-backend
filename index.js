@@ -24,6 +24,18 @@ app.get('/', async(req, res) => {
     res.send('this is working')
 })
 
+app.get('/policy/get', async(req, res) => {
+  // Retrieve all companies
+  const policy = await prisma.table_1.findMany({      
+      include: {
+         offering_ : true  
+          }
+      
+  }).then((policy) => res.send(policy) )
+   .catch(err => res.status(400) )
+  // res.send('we are here')
+})
+
 app.get('/policy/:type', async(req, res) => {
     // Retrieve all posts
     var type = req.params.type
@@ -78,22 +90,13 @@ app.get('/count/:number', async(req, res) => {
 
 app.get('/company', async(req, res) => {
     // Retrieve all companies
-    const company = await prisma.table_1.findMany({
-       
+    const company = await prisma.table_1.findMany({      
         include: {
            offering_ : true  
             }
         
     }).then((company) => res.send(company) )
      .catch(err => res.status(400) )
-    // if (company.length > 0)
-    // {
-    //        res.send(company)
-    // }
-    // else{
-    //     res.status(404).send('Not found!')
-    // }
-
 })
 
 app.get('/company/:name', async(req, res) => {
@@ -118,18 +121,18 @@ app.get('/company/:name', async(req, res) => {
 
 })
 
-app.get('/policy/get/', async(req, res) => {
-  var policyId = req.params.uid
-  var productId = parseInt(policyId)
-  // Retrieve all posts
-  const allPosts = await prisma.offering_.findMany({
-      
-    include:  {
-          table_1: true
-      }
-  })
- res.json(allPosts)
-})
+// app.get('/policy/get', async(req, res) => {
+
+//   // Retrieve all posts
+//   const allPosts = await prisma.offering_.findMany({ 
+//     include:  {
+//           table_1: true
+//       }
+//   }).then((allPosts) => res.send(allPosts) )
+// .catch(err => res.status(400).send('wow') )
+// })
+
+
 
 app.get('/policy/get/:uid', async(req, res) => {
     var policyId = req.params.uid
