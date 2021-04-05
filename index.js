@@ -19,74 +19,45 @@ app.use(cors())
 
 // route
 app.get('/', async(req, res) => {
-     // Retrieve all posts
-    //  const allPosts = await prisma.offering_.findMany()
     res.send('this is working')
 })
 
 app.get('/policy/get', async(req, res) => {
   // Retrieve all companies
   const policy = await prisma.table_1.findMany({      
-      include: {
-         offering_ : true  
-          }
-      
-  }).then((policy) => res.send(policy) )
+    include: { offering_ : true }  
+  }).then((policy) => res.send(policy))
    .catch(err => res.status(400) )
-  // res.send('we are here')
 })
 
 app.get('/policy/:type', async(req, res) => {
     // Retrieve all posts
     var type = req.params.type
     const policy = await prisma.table_1.findMany({
-      orderBy :
-         {
-          Premium: 'asc' 
-         },
-
-        where: {
-           Covers: type
-        },
-        include: {
-           offering_ : true  
-            }
+      orderBy :{ Premium: 'asc' },
+      where: {Covers: type},
+      include: { offering_ : true  }
         
     }).then( (policy) =>  {  if(policy.length > 0 )
-                              {
-                                res.send(policy)
-                              }
-                              else {
-                                res.status(404).send('Not found')
-                              }
-                              }
-                              )
-    .catch(err => res.status(500))
+      { res.send(policy)}
+        else { res.status(404).send('Not found')}
+      })
+      .catch(err => res.status(500))
     
 
 })
 
 app.get('/count/:number', async(req, res) => {
-    // Retrieve all posts
+    // Retrieve with the size of the number
     var number = req.params.number
     const policy = await prisma.table_1.findMany({
-       where: {
-        Number : number
-       },
-        include: {
-           offering_ : true  
-            }
-        
+      where: { Number : number},
+      include: { offering_ : true }  
     })
     if (policy.length > 0)
-    {
-           res.send(policy)
-    }
-    else{
-        res.status(404).send('Not found!')
-    }
-
-})
+    { res.send(policy)}
+    else{ res.status(404).send('Not found!')}
+});
 
 app.get('/company', async(req, res) => {
     // Retrieve all companies
@@ -132,6 +103,28 @@ app.get('/company/:name', async(req, res) => {
 // .catch(err => res.status(400).send('wow') )
 // })
 
+app.get('/policy/lowestrate/:type', async(req, res) => {
+  let type = req.params.type;
+  const lowestPolicy = await prisma.table_1.findMany({
+    take: 2,
+    orderBy :{ Premium: 'asc' },
+    where: { Covers: type, }
+  });
+
+  if (lowestPolicy.length > 0){
+    res.send({
+      lowestPolicy,
+      type
+    })
+  } else {
+    res.send({
+      errorMessage: 'Something went wrong'
+    })
+  }
+
+  
+  
+})
 
 
 app.get('/policy/get/:uid', async(req, res) => {
