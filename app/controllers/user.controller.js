@@ -11,8 +11,7 @@ const getAllUsers = async (req, res, next) => {
         res.status(200).json({
           users: result.rows
          })
-    })
-   
+    }) 
 }
 
 const getUserByEmail = async (req, res, next) => {
