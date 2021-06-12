@@ -5,7 +5,9 @@ const { getUsers, getUsersById, addUser }= require('../queries/user');
 const getAllUsers = async (req, res, next) => {
     getUsers((err, result) => {
         if (err) {
-            throw err;
+            console.log(err);
+           res.status(500).send(err)
+
         }
         console.log(result.rows);
         res.status(200).json({
@@ -19,7 +21,8 @@ const getUserByEmail = async (req, res, next) => {
     console.log(email, '-----email')
     getUsersById(email, (err, result) => {
         if (err){
-            throw err;
+           console.log( err);
+           res.status(500).send(err)
         }
         console.log(result.rows);
         if (result.rows.length > 0){
